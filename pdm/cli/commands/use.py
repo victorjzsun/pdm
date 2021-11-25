@@ -16,8 +16,14 @@ class Command(BaseCommand):
             help="Select the first matched interpreter",
         )
         parser.add_argument(
+            "-n"
+            "--nth"
+            help="Select the nth matched interpreter (overriden by --first if used)",
+            default=-1
+        )
+        parser.add_argument(
             "python", nargs="?", help="Specify the Python version or path", default=""
         )
 
     def handle(self, project: Project, options: argparse.Namespace) -> None:
-        actions.do_use(project, options.python, options.first)
+        actions.do_use(project, options.python, 0 if options.first else options.nth)
