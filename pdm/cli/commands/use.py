@@ -16,10 +16,11 @@ class Command(BaseCommand):
             help="Select the first matched interpreter",
         )
         parser.add_argument(
-            "-n"
-            "--nth"
+            "-n",
+            "--nth",
+            type=int,
             help="Select the nth matched interpreter (overriden by --first if used)",
-            default=-1
+            default=-1,
         )
         parser.add_argument(
             "python", nargs="?", help="Specify the Python version or path", default=""
