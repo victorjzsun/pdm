@@ -484,7 +484,7 @@ def do_init(
     project.write_pyproject()
 
 
-def do_use(project: Project, python: str = "", first: bool = False) -> None:
+def do_use(project: Project, python: str = "", nth: int = -1) -> None:
     """Use the specified python version and save in project config.
     The python can be a version string or interpreter path.
     """
@@ -500,8 +500,15 @@ def do_use(project: Project, python: str = "", first: bool = False) -> None:
     )
     if not found_interpreters:
         raise NoPythonVersion("Python interpreter is not found on the system.")
-    if first or len(found_interpreters) == 1:
+    if len(found_interpreters) == 1:
         selected_python = found_interpreters[0]
+    elif nth != -1:
+        if len(found_interpreters) < nth + 1:
+            raise PdmUsageError(
+                f"Cannot use {nth}'th interpreter,"
+                f"only found {len(found_interpreters)} interpreters."
+            )
+        selected_python = found_interpreters[nth]
     else:
         project.core.ui.echo("Please enter the Python interpreter to use")
         for i, py_version in enumerate(found_interpreters):
